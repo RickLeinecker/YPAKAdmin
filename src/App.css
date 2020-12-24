@@ -1,38 +1,65 @@
-.App {
-  text-align: center;
+.container-centered {
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.form-container {
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container--positioned {
+  /* position: absolute;
+  top: 25vh; */
+  /* margin-top: 35vh; */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container-header {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.125);
+  border-bottom: rgba(0, 0, 0, 0.175);
+}
+
+.container--bordered {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.operation-button {
+  margin: auto;
+  width: 80%;
+}
+
+.control-button1 {
+  margin: auto;
+  width: 40%;
+}
+.control-button {
+  min-width: 100px;
+}
+
+.btn > svg.no-style {
+  stroke-width: 10px;
+  stroke: #0069d9;
+}
+
+.btn > svg:not(.no-style) {
+  stroke-width: 30px;
+  stroke: #0069d9;
+}
+
+.container-footer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.form-label-col {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.justify-content-center {
+	min-height: 100vh;
+	justify-content: center;
+	align-items: center;
 }
