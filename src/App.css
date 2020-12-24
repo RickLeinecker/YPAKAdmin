@@ -17,6 +17,7 @@
   padding: 20px;
   background: rgba(0, 0, 0, 0.125);
   border-bottom: rgba(0, 0, 0, 0.175);
+  font-size: 1.2rem;
 }
 
 .container--bordered {
@@ -53,13 +54,52 @@
 }
 
 .form-label-col {
-	display: flex;
-	justify-content: flex-end;
-	align-items: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .justify-content-center {
-	min-height: 100vh;
-	justify-content: center;
-	align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.rhs-user-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* background: rgba(0,0,0,.1); */
+  padding: 0;
+}
+
+.rhs-user-page__user-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 294px;
+  max-height: 362px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+/* .rhs-user-page__user-list > * {
+	border: 3px solid pink;
+} */
+.rhs-user-page__user-list > .list-group-item.list-group-item-action:focus {
+  outline: none;
+}
+
+.checkbox--lg > input[type="checkbox"] {
+  -ms-transform: scale(1.85); /* IE */
+  -moz-transform: scale(1.85); /* FF */
+  -webkit-transform: scale(1.85); /* Safari and Chrome */
+  -o-transform: scale(1.85); /* Opera */
+}
+.checkbox--lg > label.form-check-label {
+  padding-left: 5px;
+}
+
+.rhs-user-page__admin-check {
+	padding-left: .3rem;
+	margin-bottom: 1.35rem;
 }

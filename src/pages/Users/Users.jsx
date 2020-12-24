@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -9,12 +9,22 @@ import {
   faPoll, // Alternative to ClipboardList
   faListAlt, // Alternative to ClipboardList
 } from "@fortawesome/free-solid-svg-icons";
+import { v4 as uuid } from 'uuid'
 import {
 	faSave,
 	faPlusSquare
 } from "@fortawesome/free-regular-svg-icons";
 import { useHistory } from "react-router-dom";
 import TextError from "../../components/TextError";
+
+const USER_DEMO = [
+	{id: uuid(), name: "Kyle Ginter" },
+	{id: uuid(), name: "Jared Ginter" },
+	{id: uuid(), name: "Garrette Ginter" },
+	{id: uuid(), name: "Robin Ginter" },
+	{id: uuid(), name: "Cary Ginter" },
+	{id: uuid(), name: "Gonen Matias" },
+]
 
 const Users = () => {
 	const history = useHistory();
@@ -26,6 +36,7 @@ const Users = () => {
 	const [confirm, setConfirm] = useState("");
 	const [email, setEmail] = useState("");
 	const [phone, setPhone] = useState("");
+	const [selectedUser, setSelectedUser] = useState(undefined);
 
 	const [firstError, setFirstError] = useState("");
 	const [lastError, setLastError] = useState("");
@@ -34,6 +45,11 @@ const Users = () => {
 	const [confirmError, setConfirmError] = useState("");
 	const [emailError, setEmailError] = useState("");
 	const [phoneError, setPhoneError] = useState("");
+
+	// TODO : when selecting a user
+	const loadUserToForm = () => {
+		
+	}
 
 	const handleSearchChange = (e) => { setSearch(e.target.value) };
 	const handleFirstChange = (e) => { setSearch(e.target.value) };
@@ -44,6 +60,18 @@ const Users = () => {
 	const handleEmailChange = (e) => { setSearch(e.target.value) };
 	const handlePhoneChange = (e) => { setSearch(e.target.value) };
 	const handleSearch = (e) => { e.preventDefault(); console.log("Searching for ", search) };
+
+	const handleUserSelection = (user) => { 
+		// Cancel user selection
+		if (user.id === selectedUser) {
+			setSelectedUser(undefined);
+			return;
+		}
+
+		// Select a user for admin actions
+		setSelectedUser(user.id);
+		console.log("Selecting User", user)
+	};
 
 	return (
 		<Container className="container-centered">
@@ -115,7 +143,20 @@ const Users = () => {
 							  <TextError center>{phoneError}</TextError>
 						  </Form.Group>
 					  </Col>
-					  <Col></Col>
+					  <Col className="rhs-user-page">
+							<ListGroup className="rhs-user-page__user-list" variant="flush">
+								{USER_DEMO.map(user => {
+									return <ListGroup.Item 
+											onClick={ () => handleUserSelection(user) }
+											key={user.id}
+											active={!!user.id && user.id === selectedUser}
+											action>
+												{user.name}
+											</ListGroup.Item>
+								})}
+							</ListGroup>
+							<Form.Group className="rhs-user-page__admin-check"><Form.Check className="checkbox--lg" type="checkbox" label="  Super Admin" /></Form.Group>
+					  </Col>
 				  </Row>
 			  </section>
 			  <section className="container-footer py-3 px-4">
