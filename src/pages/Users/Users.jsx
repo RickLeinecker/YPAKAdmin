@@ -88,7 +88,7 @@ const Users = () => {
 						  <Form onSubmit={handleSearch}>
 							<Form.Group>
 								<Row>
-									<Col sm={3}><Button className="btn-block" type="submit">Search</Button></Col>
+									<Col sm={3}><Button className="btn-block search-btn" type="submit">Search</Button></Col>
 									<Col><Form.Control type="text" onChange={handleSearchChange}></Form.Control></Col>
 								</Row>
 							</Form.Group>

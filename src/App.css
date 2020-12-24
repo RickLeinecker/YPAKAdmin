@@ -55,8 +55,8 @@
 
 .form-label-col {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  /* justify-content: flex-end;
+  align-items: flex-end; */
 }
 
 .justify-content-center {
@@ -100,6 +100,27 @@
 }
 
 .rhs-user-page__admin-check {
-	padding-left: .3rem;
-	margin-bottom: 1.35rem;
+  padding-left: 0.3rem;
+  margin-bottom: 1.35rem;
+}
+
+@media (max-width: 576px) {
+  .rhs-user-page {
+    padding: 0 15px;
+  }
+
+  .rhs-user-page .rhs-user-page__user-list {
+	  margin-bottom: 1rem;
+  }
+
+  .search-btn {
+    margin-bottom: 8px;
+  }
+}
+
+@media (min-width: 576px) {
+  .form-label-col {
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
 }
