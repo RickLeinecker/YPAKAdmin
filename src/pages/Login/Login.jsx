@@ -46,14 +46,18 @@ const Login = () => {
   };
 
   useEffect(() => {
+	let _auth_error = auth_error;
     if (auth_error) {
-      switch (auth_error.code) {
+	  if (typeof _auth_error === 'string')
+		_auth_error = { message: _auth_error }
+
+      switch (_auth_error.code) {
         case "auth/invalid-email":
-          setEmailError(auth_error.message);
+          setEmailError(_auth_error.message);
           break;
 
         default:
-          setFormError(auth_error.message);
+          setFormError(_auth_error.message);
       }
     }
   }, [auth_error]);
