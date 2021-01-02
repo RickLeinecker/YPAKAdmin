@@ -14,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import Users from './pages/Users/Users';
 import Surveys from './pages/Surveys/Surveys';
 import Videos from './pages/Videos/Videos';
+import ProtectedRoute from './containers/ProtectedRoute';
 
 function App() {
 
@@ -27,12 +28,12 @@ function App() {
 				<Router>
 					<AppContext>
 						<Switch>
-							<Route path='/landing' exact component={Landing}></Route>
+							<ProtectedRoute path='/landing' exact component={Landing}></ProtectedRoute>
 							<Route path='/login/forgot' exact component={ForgotPassword}></Route>
 							<Route path='/login' exact component={Login}></Route>
-							<Route path='/users' exact component={Users}></Route>
-							<Route path='/surveys' exact component={Surveys}></Route>
-							<Route path='/videos' exact component={Videos}></Route>
+							<ProtectedRoute superOnly path='/users' exact component={Users}></ProtectedRoute>
+							<ProtectedRoute path='/surveys' exact component={Surveys}></ProtectedRoute>
+							<ProtectedRoute path='/videos' exact component={Videos}></ProtectedRoute>
 							<Route path='/*'><Redirect to='/landing' /></Route>
 						</Switch>
 					</AppContext>

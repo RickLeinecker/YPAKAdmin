@@ -12,7 +12,9 @@ export default ({ children, location }) => {
   const path = window.location.pathname;
 
   // TODO : useSelector for states
-  const { auth, auth_loading } = useSelector((state) => state.auth);
+  const { auth, auth_loading, auth_loaded } = useSelector(
+    (state) => state.auth
+  );
   const [redirect, setRedirect] = useState("");
 
   // TODO : loading state
@@ -26,12 +28,20 @@ export default ({ children, location }) => {
   //     } else history.push("/landing");
   //   }, [auth, auth_loading]);
 
+  // Redirect to landing page from here
+  useEffect(() => {
+    if (auth_loaded && redirect) {
+      history.push(redirect);
+      setRedirect("");
+    }
+  }, [auth_loaded, redirect]);
+
   // Auth handler
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         dispatch(authRestore(user));
-        history.push("/landing");
+		setRedirect("/landing");
       } else {
         dispatch(authFlush());
         history.push("/login");
