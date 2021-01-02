@@ -15,6 +15,9 @@ const config = {
 
 console.log(config);
 
+// Authentication Service to prevent stupid auto login on user creation
+export const fireAuthService = firebase.initializeApp(config, "authService");
+
 // Initialize Firebase
 firebase.initializeApp(config);
 
