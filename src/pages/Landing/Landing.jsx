@@ -16,6 +16,7 @@ import { authLogout } from "../../store/actions/authActions";
 const Landing = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { auth } = useSelector((state) => state.auth);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ const Landing = () => {
 			</section>
 			<section className="container-body pb-3">
 				<Row style={{padding: "15px"}}>
-					<Col><Button className="btn-block operation-button" onClick={()=>redirect('/users')}><FontAwesomeIcon icon={faUser} /> Users</Button></Col>
+					<Col><Button disabled={!auth || !auth.super} className="btn-block operation-button" onClick={()=>redirect('/users')}><FontAwesomeIcon icon={faUser} /> Users</Button></Col>
 					<Col><Button className="btn-block operation-button" onClick={()=>redirect('/videos')}><FontAwesomeIcon icon={faVideo} /> Videos</Button></Col>
 				</Row>
 				<Row style={{padding: "20px 15px"}}>
