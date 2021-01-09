@@ -72,19 +72,20 @@ const Users = () => {
 		else if (error.code.includes("password")) setPasswordError(error.message)
 	}
 
-	const validate = () => {
+	const validate = (create=true) => {
 		let _valid = true;
 
-		if (!email) {
-			setEmailError("Please provide an email address");
-			_valid = false;
-		}
+		if (create) {
+			console.log("Create is true");
+			if (!email) {
+				setEmailError("Please provide an email address");
+				_valid = false;
+			}
 
-		console.log("password", password)
-		console.log("confirm", confirm)
-		if (password !== confirm) {
-			setConfirmError("Passwords do not match");
-			_valid = false;
+			if (password !== confirm) {
+				setConfirmError("Passwords do not match");
+				_valid = false;
+			}
 		}
 
 		if (!first) {
@@ -103,7 +104,16 @@ const Users = () => {
 
 	// TODO : when selecting a user
 	const loadUserToForm = (user) => {
-		
+		if (!user)
+			return;
+
+		// TODO : get email from auth
+		// setEmail(user.email);
+		console.log(user);
+		setFirst(user.first);
+		setLast(user.last);
+		setPhone(user.phone);
+		setIsSuper(user.super);
 	}
 
 	const handleSearchChange = (e) => { setSearch(e.target.value) };
@@ -148,6 +158,33 @@ const Users = () => {
 		console.log("Selecting User", user)
 	};
 
+	const updateUser = (e) => {
+		if (e && typeof e.preventDefault === 'function')
+			e.preventDefault();
+
+		_resetErrors();
+		if (!validate(false))
+			return;
+		
+		setSaving(true);
+		firebase.firestore().collection("Users").doc(selectedUser)
+			.update({
+				first,
+				last,
+				phone,
+				super: isSuper,
+			})
+			.then(() => {
+				handleSearch();
+			})
+			.catch((err) => {
+				console.log("update user error:", err);
+				_parseErrors(err);
+				setFormError(err.message);
+			})
+			.finally(() => setSaving(false));
+	}
+
 	const createUser = (e) => {
 		if (e && typeof e.preventDefault === 'function')
 			e.preventDefault();
@@ -190,9 +227,11 @@ const Users = () => {
 
 	useEffect(() => {
 		// TODO : fetch all users of admin's group
-		firebase.firestore().collection("Users").where("belongsTo", "==", auth.groupId).get()
-			.then((snapshot) => setUsers(snapshot.docs.map(doc =>  ({ ...doc.data(), id: doc.id }) )))
-			.finally(() => setSearching(false));
+		// firebase.firestore().collection("Users").where("belongsTo", "==", auth.groupId).get()
+		// firebase.firestore().collection("Users").get()
+		firebase.firestore().collection("Users").where("belongsTo", "==", "7gVQmuHRZoBwsYUZV0vv").get()
+			.then((snapshot) => { setUsers(snapshot.docs.map(doc =>  ({ ...doc.data(), id: doc.id }) )); console.log(snapshot.docs.map(doc =>  ({ ...doc.data(), id: doc.id }) )) })
+			.finally(() => { setSearching(false); });
 		// .then((snapshot) => console.log("Fetched users:", snapshot.docs.map(doc => doc.data())));
 	}, [])
 
@@ -220,21 +259,21 @@ const Users = () => {
 						  <Form.Group>
 							  <Row>
 								<Col sm={3} className="form-label-col"><Form.Label>First</Form.Label></Col>
-								<Col><Form.Control isInvalid={firstError} type="text" onChange={handleFirstChange}></Form.Control></Col>
+								<Col><Form.Control value={first} isInvalid={firstError} type="text" onChange={handleFirstChange}></Form.Control></Col>
 							  </Row>
 							  <Row><Col sm={{offset: 3}}><TextError>{firstError}</TextError></Col></Row>
 						  </Form.Group>
 						  <Form.Group>
 							  <Row>
 								<Col sm={3} className="form-label-col"><Form.Label>Last</Form.Label></Col>
-								<Col><Form.Control isInvalid={lastError} type="text" onChange={handleLastChange}></Form.Control></Col>
+								<Col><Form.Control value={last} isInvalid={lastError} type="text" onChange={handleLastChange}></Form.Control></Col>
 							  </Row>
 							  <Row><Col sm={{offset: 3}}><TextError>{lastError}</TextError></Col></Row>
 						  </Form.Group>
 						  <Form.Group>
 							  <Row>
 								<Col sm={3} className="form-label-col"><Form.Label>Email</Form.Label></Col>
-								<Col><Form.Control isInvalid={emailError} type="email" onChange={handleEmailChange}></Form.Control></Col>
+								<Col><Form.Control value={email} isInvalid={emailError} type="email" onChange={handleEmailChange}></Form.Control></Col>
 							  </Row>
 							  <Row><Col sm={{offset: 3}}><TextError>{emailError}</TextError></Col></Row>
 						  </Form.Group>
@@ -262,13 +301,13 @@ const Users = () => {
 						  <Form.Group>
 							  <Row>
 								<Col sm={3} className="form-label-col"><Form.Label>Phone</Form.Label></Col>
-								<Col><Form.Control type="text" onChange={handlePhoneChange}></Form.Control></Col>
+								<Col><Form.Control value={phone}  type="text" onChange={handlePhoneChange}></Form.Control></Col>
 							  </Row>
 							  <Row><Col sm={{offset: 3}}><TextError>{phoneError}</TextError></Col></Row>
 						  </Form.Group>
 					  </Col>
 					  <Col className="rhs-user-page">
-							<ListGroup className="rhs-user-page__user-list" variant="flush">
+							<ListGroup className="rhs-user-page__user-list" variant="flush" style={!users || !users.length ? {border: "none"} : undefined}>
 								{users.map(user => {
 									return <ListGroup.Item 
 											onClick={ () => handleUserSelection(user) }
@@ -285,7 +324,7 @@ const Users = () => {
 				  <TextError center>{formError}</TextError>
 			  </section>
 			  <section className="container-footer py-3 px-4">
-					<Button className="control-button mr-3" disabled={!selectedUser}><FontAwesomeIcon icon={faSave} className="no-style"/> Save</Button>
+					<Button className="control-button mr-3" disabled={!selectedUser} onClick={updateUser}><FontAwesomeIcon icon={faSave} className="no-style"/> Save</Button>
 					<Button className="control-button mr-3" onClick={createUser}><FontAwesomeIcon icon={faPlusSquare} className="no-style"/> New</Button>
 					<Button className="control-button" onClick={() => history.push('/landing')}><FontAwesomeIcon icon={faArrowLeft} /> Back</Button>
 			  </section>
