@@ -72,7 +72,7 @@ export const authRestore = (auth) => {
 					throw Error('Invalid user, please log in again.');
 
 				// Append additional auth data
-				auth.groupId = docData.belongsTo.id;
+				if (auth.groupId) auth.groupId = typeof docData.belongsTo === "string" ? docData.belongsTo : docData.belongsTo.id;
 				auth.super = docData.super;
 				
 				// Success
